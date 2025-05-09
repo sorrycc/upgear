@@ -1,0 +1,57 @@
+{
+  "name": "upgear",
+  "version": "0.0.0-alpha.0",
+  "description": "TODO",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsx ./src/cli.ts",
+    "format": "prettier --write .",
+    "build": "tsc",
+    "release": "utools release --git-tag --github-release --changelog",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "authors": [
+    "chencheng <sorrycc@gmail.com> (https://github.com/sorrycc)"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^22.14.1",
+    "@types/yargs-parser": "^21.0.3",
+    "@umijs/tools": "^0.1.35",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "openai": "^4.93.0",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1",
+    "yargs-parser": "^21.1.1",
+    "zod": "^3.24.2"
+  },
+  "volta": {
+    "node": "22.11.0",
+    "pnpm": "10.8.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
+  },
+  "dependencies": {
+    "@types/semver": "^7.7.0",
+    "pathe": "^2.0.3",
+    "semver": "^7.7.1",
+    "tar": "^7.4.3"
+  }
+}
