@@ -1,10 +1,10 @@
 {
   "name": "upgear",
   "version": "0.0.0-alpha.0",
-  "description": "TODO",
+  "description": "Upgear is a CLI tool that helps you update yourself.",
   "type": "module",
-  "main": "./dist/index.mjs",
-  "types": "./types.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -47,6 +47,12 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
+  },
+  "homepage": "https://github.com/sorrycc/upgear",
+  "bugs": "https://github.com/sorrycc/upgear/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sorrycc/upgear"
   },
   "dependencies": {
     "@types/semver": "^7.7.0",

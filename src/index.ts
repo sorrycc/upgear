@@ -36,7 +36,7 @@ export interface CheckAndUpdateOptions {
    * Release channel to check for updates
    * @default "latest"
    */
-  channel?: 'latest' | 'next' | 'canary';
+  channel?: 'latest' | 'next' | 'canary' | string;
 
   /**
    * Whether to skip update checks when running in CI environments
