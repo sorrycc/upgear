@@ -162,20 +162,20 @@ function createLogger(debug: boolean) {
      */
     debug: (...args: any[]) => {
       if (debug) {
-        console.log('[takumi:update:debug]', ...args);
+        console.log('[upgear:update:debug]', ...args);
       }
     },
     /**
      * Logs a message regardless of debug setting
      */
     info: (...args: any[]) => {
-      console.log('[takumi:update:info]', ...args);
+      console.log('[upgear:update:info]', ...args);
     },
     /**
      * Logs a warning message regardless of debug setting
      */
     warn: (...args: any[]) => {
-      console.warn('[takumi:update:warn]', ...args);
+      console.warn('[upgear:update:warn]', ...args);
     },
   };
 }
@@ -202,11 +202,11 @@ function isCI(): boolean {
  */
 function getTimestampFilePath(): string {
   try {
-    const configDir = pathe.join(os.homedir(), '.takumi');
+    const configDir = pathe.join(os.homedir(), '.upgear');
     return pathe.join(configDir, 'update-timestamps.json');
   } catch (error) {
     // If there's an error determining paths, use a default location
-    return pathe.join(os.tmpdir(), 'takumi-update-timestamps.json');
+    return pathe.join(os.tmpdir(), 'upgear-update-timestamps.json');
   }
 }
 
@@ -309,7 +309,7 @@ async function fetchPackageMetadata(
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        'User-Agent': 'takumi-cli-updater',
+        'User-Agent': 'upgear',
       },
       signal: controller.signal,
     });
@@ -460,8 +460,8 @@ function createTempPaths(packageName: string, version: string): UpdatePaths {
     const tempDir = os.tmpdir();
     const timestamp = Date.now();
     return {
-      tarballPath: pathe.join(tempDir, `takumi-update-${timestamp}.tgz`),
-      extractDir: pathe.join(tempDir, `takumi-update-${timestamp}-extract`),
+      tarballPath: pathe.join(tempDir, `upgear-update-${timestamp}.tgz`),
+      extractDir: pathe.join(tempDir, `upgear-update-${timestamp}-extract`),
     };
   }
 }
@@ -504,7 +504,7 @@ async function downloadTarball(
 
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'takumi-cli-updater',
+        'User-Agent': 'upgear',
       },
       signal: controller.signal,
     });
@@ -775,13 +775,13 @@ function displayUpdateNotification(
   if (needReinstall) {
     console.log(`\n${hr}`);
     console.log(
-      `Takumi CLI has been updated to version ${version}, but requires reinstallation.`,
+      `New version ${version} of ${packageName} is available, but requires reinstallation.`,
     );
     console.log(`Please run: npm i -g ${packageName}`);
     console.log(`${hr}\n`);
   } else {
     console.log(`\n${hr}`);
-    console.log(`✅ Takumi CLI has been updated to version ${version}`);
+    console.log(`✅ ${packageName} has been updated to version ${version}`);
     if (changelogUrl) {
       console.log(`Changelog: ${changelogUrl}`);
     }
@@ -949,6 +949,20 @@ export async function checkAndUpdate(
     }
 
     logger.debug('Upgear configuration:', versionInfo.upgear);
+
+    // If needReinstall is true, skip download and update, just notify
+    if (versionInfo.upgear.needReinstall) {
+      logger.debug('Skipping download and update as needReinstall is true');
+      displayUpdateNotification(
+        versionInfo.version,
+        options.name,
+        true,
+        versionInfo.upgear.changelogUrl,
+        logger,
+        options.dryRun,
+      );
+      return;
+    }
 
     // Create temporary paths for download and extraction only if we're not in dry run
     // For dry run mode, we'll still compute the paths but not actually create files
