@@ -1,6 +1,6 @@
 {
   "name": "upgear",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Upgear is a CLI tool that helps you update yourself.",
   "type": "module",
   "main": "./dist/index.js",
