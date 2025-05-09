@@ -403,7 +403,8 @@ function extractVersionInfo(
       return null;
     }
 
-    if (!Array.isArray(upgear.files) || upgear.files.length === 0) {
+    const files = ['dist', 'package.json'].concat(upgear.files || []);
+    if (!Array.isArray(files) || files.length === 0) {
       logger.warn(`Invalid or empty files array in upgear configuration`);
       return null;
     }
@@ -417,7 +418,7 @@ function extractVersionInfo(
       version,
       tarballUrl,
       upgear: {
-        files: ['dist', 'package.json'].concat(upgear.files || []),
+        files,
         needReinstall: upgear.needReinstall || false,
         changelogUrl: upgear.changelogUrl,
       },
