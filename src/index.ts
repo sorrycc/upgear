@@ -61,6 +61,18 @@ export interface CheckAndUpdateOptions {
    * If not provided, it will be determined automatically
    */
   installDir?: string;
+
+  /**
+   * Custom display function for update notifications
+   * If provided, this function will be called instead of the default display
+   * @param info Object containing update information
+   */
+  onDisplay?: (info: {
+    version: string;
+    packageName: string;
+    needReinstall: boolean;
+    changelogUrl?: string;
+  }) => void;
 }
 
 /**
@@ -162,20 +174,20 @@ function createLogger(debug: boolean) {
      */
     debug: (...args: any[]) => {
       if (debug) {
-        console.log('[upgear:update:debug]', ...args);
+        console.log('[upgear:debug]', ...args);
       }
     },
     /**
      * Logs a message regardless of debug setting
      */
     info: (...args: any[]) => {
-      console.log('[upgear:update:info]', ...args);
+      console.log('[upgear:info]', ...args);
     },
     /**
      * Logs a warning message regardless of debug setting
      */
     warn: (...args: any[]) => {
-      console.warn('[upgear:update:warn]', ...args);
+      console.warn('[upgear:warn]', ...args);
     },
   };
 }
@@ -754,6 +766,7 @@ async function copyUpdatedFiles(
  * @param changelogUrl URL to the changelog (optional)
  * @param logger Logger instance
  * @param dryRun Whether this is a dry run
+ * @param onDisplay Custom display function (optional)
  */
 function displayUpdateNotification(
   version: string,
@@ -762,6 +775,7 @@ function displayUpdateNotification(
   changelogUrl: string | undefined,
   logger: ReturnType<typeof createLogger>,
   dryRun: boolean,
+  onDisplay?: CheckAndUpdateOptions['onDisplay'],
 ): void {
   if (dryRun) {
     logger.info(
@@ -770,6 +784,19 @@ function displayUpdateNotification(
     return;
   }
 
+  // Use custom display function if provided
+  if (onDisplay) {
+    logger.debug('Using custom display function for update notification');
+    onDisplay({
+      version,
+      packageName,
+      needReinstall,
+      changelogUrl,
+    });
+    return;
+  }
+
+  // Default display implementation
   const hr = '─'.repeat(60);
 
   if (needReinstall) {
@@ -863,6 +890,7 @@ export async function checkAndUpdate(
     updateCheckIntervalMs: opts.updateCheckIntervalMs ?? 21600000, // 6 hours in ms
     dryRun: opts.dryRun ?? false,
     installDir: opts.installDir,
+    onDisplay: opts.onDisplay,
   };
 
   const logger = createLogger(options.debug);
@@ -960,6 +988,7 @@ export async function checkAndUpdate(
         versionInfo.upgear.changelogUrl,
         logger,
         options.dryRun,
+        options.onDisplay,
       );
       return;
     }
@@ -1022,6 +1051,7 @@ export async function checkAndUpdate(
         versionInfo.upgear.changelogUrl,
         logger,
         options.dryRun,
+        options.onDisplay,
       );
 
       logger.info(
