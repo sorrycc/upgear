@@ -1,3 +1,10 @@
+## 0.0.2
+
+`2025-05-10`
+
+- feat: Add custom update display via onDisplay option by [@sorrycc](https://github.com/sorrycc)
+
+
 ## 0.0.1
 
 `2025-05-09`
