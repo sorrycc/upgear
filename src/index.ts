@@ -964,7 +964,7 @@ export async function checkAndUpdate(
       return;
     }
 
-    logger.info(
+    logger.debug(
       `Update available for ${options.name}: ${options.version} → ${latestVersion}`,
     );
 
@@ -1054,7 +1054,7 @@ export async function checkAndUpdate(
         options.onDisplay,
       );
 
-      logger.info(
+      logger.debug(
         `Update to version ${versionInfo.version} completed successfully`,
       );
     } catch (error) {
