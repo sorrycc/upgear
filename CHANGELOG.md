@@ -1,3 +1,10 @@
+## 0.0.3
+
+`2025-05-11`
+
+- refactor: Change update status logs from info to debug by [@sorrycc](https://github.com/sorrycc)
+
+
 ## 0.0.2
 
 `2025-05-10`
